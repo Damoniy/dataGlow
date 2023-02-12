@@ -1,0 +1,6 @@
+oracle:
+  datasource:
+    jdbc-url: jdbc:postgresql://localhost:5432/dataglow
+    driverClassName: org.postgresql.Driver
+    username: dataGlow
+    password: insight
