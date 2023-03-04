@@ -1,4 +1,4 @@
-package br.com.woodenlion.configuration
+package org.dataglow.configuration
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.jdbc.DataSourceBuilder
