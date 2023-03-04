@@ -1,6 +1,6 @@
 graceful:
   datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/dataglow
+    jdbc-url: jdbc:postgresql://ec2-54-157-79-121.compute-1.amazonaws.com:5432/dect7suv94ai4r
     driverClassName: org.postgresql.Driver
-    username: dataGlow
-    password: insight
+    username: ypnfhrlgjlpjkx
+    password: a5ac6fb9cce98726be4404cecc0f7bbe41b37b42dea0b762f8f792302beff148
