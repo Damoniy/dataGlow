@@ -17,6 +17,6 @@ class CloudStorageController(@Autowired val cloudStorageService: CloudStorageSer
 
     @GetMapping("/v1/storage/mangaChapter")
     fun getMangaChapter(): ResponseEntity<*> {
-        return cloudStorageService.getMangaCHapterPageList()
+        return cloudStorageService.getMangaChapterPageList()
     }
 }

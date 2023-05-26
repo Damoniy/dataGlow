@@ -1,8 +1,6 @@
 package org.dataglow.rest.repository
 
 import com.google.api.gax.paging.Page
-import com.google.auth.Credentials
-import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Blob
 import com.google.cloud.storage.BlobId
 import com.google.cloud.storage.BlobInfo
@@ -13,13 +11,13 @@ import org.dataglow.domain.manga.MangaPage
 import org.springframework.stereotype.Repository
 import java.net.URL
 import java.nio.file.Paths
-import java.util.Scanner
 import java.util.concurrent.TimeUnit
 
 @Repository
 class CloudStorageRepository {
+    private val storage = StorageOptions.newBuilder().setCredentials(CloudStorageConfig.credentials).setProjectId(CloudStorageConfig.projectId).build().service
+
     fun uploadImage(objectName: String, filePath: String) {
-        val storage: Storage = StorageOptions.newBuilder().setCredentials(CloudStorageConfig.credentials).setProjectId(CloudStorageConfig.projectId).build().service;
         val blobId = BlobId.of(CloudStorageConfig.bucketName, objectName)
         val blobInfo = BlobInfo.newBuilder(blobId).build()
 
@@ -33,10 +31,13 @@ class CloudStorageRepository {
         storage.createFrom(blobInfo, Paths.get(filePath), precondition)
     }
 
-    fun getMangaChapterPageList(): List<MangaPage> {
-        val credentials: Credentials = GoogleCredentials.fromStream(this.javaClass.getResourceAsStream("/credentials.json"))
-        val storage: Storage = StorageOptions.newBuilder().setCredentials(credentials).setProjectId("mangalegion").build().service
-        val blobs: Page<Blob> = storage.list(CloudStorageConfig.bucketName, Storage.BlobListOption.prefix("child/"))
+    fun genMangaLogoSignedURL(mangaId: Int): URL {
+        val blob = storage.get(CloudStorageConfig.bucketName, "$mangaId/logo.jpg")
+        return blob.signUrl(1, TimeUnit.DAYS)
+    }
+
+    fun getMangaChapterPageList(mangaId: Int, chapterId: Int): List<MangaPage> {
+        val blobs: Page<Blob> = storage.list(CloudStorageConfig.bucketName, Storage.BlobListOption.prefix("$mangaId/$chapterId"))
         val pages = ArrayList<MangaPage>()
         var i = 0
 
